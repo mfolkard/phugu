@@ -9,7 +9,9 @@
 	define('DB_USER', 'phugu');
 	define('DB_PASSWORD', 'phu9u');
 
-	define('DB_TABLE_PREFIX', 'PHU');
+	define('DB_TABLE_PREFIX', 'phu_');
+
+	define('SESSION_STORE', 'db'); /* Possible values are cookie or db */
 
 	define('ROOTDIR', dirname(__FILE__) . "/");
 	define('INCDIR', ROOTDIR . "inc/");

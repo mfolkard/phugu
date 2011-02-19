@@ -23,7 +23,7 @@
 		}
 
 		/* Close the database connection*/
-		function db_close(){
+		function DBclose(){
 			if($this->conn){
 				mysql_close($this->conn);
 			}
@@ -31,7 +31,7 @@
 
 		/* Destructor: Tidy up the database connection*/
 		function __destruct(){
-			$this->db_close();
+			$this->DBclose();
 		}
 	}
 

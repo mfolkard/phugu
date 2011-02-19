@@ -7,7 +7,7 @@
 	} else {
 		$verbose = false;
 	}
-	$sql = "SELECT COUNT(*) FROM " . DB_TABLE_PREFIX . "USERS";
+	$sql = "SELECT COUNT(*) FROM " . DB_TABLE_PREFIX . "users";
 	echo ($verbose ? "Testing for previous install...<br />" : "");
 	$res = $dbo->query($sql);
 
@@ -24,59 +24,83 @@
 	}
 
 
-	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "USERS";
+	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "users";
 	echo ($verbose ? "Dropping users table...<br />" : "");
 	$dbo->query($sql);
 
-	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "USERS (" .
-		"ID INT(11) PRIMARY KEY AUTO_INCREMENT, " .
-		"USERNAME VARCHAR(20) NOT NULL, " .
-		"PASSWORD VARCHAR(20) NOT NULL" .
+	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "users (" .
+		"id INT(11) PRIMARY KEY AUTO_INCREMENT, " .
+		"username VARCHAR(20) NOT NULL, " .
+		"password VARCHAR(20) NOT NULL" .
 		") ENGINE = MYISAM";
 	echo ($verbose ? "Creating users table...<br />" : "");
 	$dbo->query($sql);
 
-	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "USERS (USERNAME, PASSWORD) VALUES ('root', 'root')";
+	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "users (username, password) VALUES ('root', 'root')";
 	echo ($verbose ? "Inserting root user...<br />" : "");
 	$dbo->query($sql);
 	$root_id = mysql_insert_id();
 	echo ($verbose ? "Root id:" . $root_id . "<br />" : "");
 
-	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "GROUPS";
+	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "groups";
 	echo ($verbose ? "Dropping groups table...<br />" : "");
 	$dbo->query($sql);
 	
-	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "GROUPS (" .
-		"ID INT(11) PRIMARY KEY AUTO_INCREMENT, " .
-		"NAME VARCHAR(20) NOT NULL" .
+	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "groups (" .
+		"id INT(11) PRIMARY KEY AUTO_INCREMENT, " .
+		"name VARCHAR(20) NOT NULL" .
 		") ENGINE = MYISAM";
 
 	echo ($verbose ? "Creating groups table...<br />" : "");
 	$dbo->query($sql);
 
-	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "GROUPS (NAME) VALUES ('administrator')";
+	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "groups (name) VALUES ('administrator')";
 
 	echo ($verbose ? "Inserting admin group...<br />" : "");
 	$dbo->query($sql);
 	$admin_group = mysql_insert_id();
 	echo ($verbose ? "Admin group:" . $admin_group . "<br />" : "");
 
-	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "USERS_GROUPS";
+	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "users_groups";
 	echo ($verbose ? "Dropping users/Groups table...<br />" : "");
 	$dbo->query($sql);
 
-	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "USERS_GROUPS (" .
-		"ID INT(11) PRIMARY KEY AUTO_INCREMENT, " .
-		"USERID INT(11) NOT NULL, " .
-		"GROUPID INT(11) NOT NULL" .
+	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "users_groups (" .
+		"id INT(11) PRIMARY KEY AUTO_INCREMENT, " .
+		"userid INT(11) NOT NULL, " .
+		"groupid INT(11) NOT NULL" .
 		") ENGINE = MYISAM";
 
 	echo ($verbose ? "Creating Users/Groups table...<br />" : "");
 	$dbo->query($sql);
 
-	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "USERS_GROUPS (USERID, GROUPID) VALUES (" . $root_id . ", " . $admin_group . ")";
+	$sql = "INSERT INTO " . DB_TABLE_PREFIX . "users_groups (userid, groupid) VALUES (" . $root_id . ", " . $admin_group . ")";
 	
 	echo ($verbose ? "Inserting root user/admin association...<br />" : "");
+	$dbo->query($sql);
+
+	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "sessions";
+	echo ($verbose ? "Dropping sessions table...<br />" : "");
+	$dbo->query($sql);
+
+	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "sessions (" .
+		"uuid VARCHAR(25) NOT NULL PRIMARY KEY, " .
+		"date_updated DATETIME NOT NULL" .
+		") ENGINE = INNODB"; /* innoDB for row level locking*/
+	echo ($verbose ? "Creating sessions table...<br />" : "");
+	$dbo->query($sql);
+
+	$sql = "DROP TABLE " . DB_TABLE_PREFIX . "session_vars";
+	echo ($verbose ? "Dropping session variables table...<br />" : "");
+	$dbo->query($sql);
+
+	$sql = "CREATE TABLE " . DB_TABLE_PREFIX . "session_vars (" .
+		"uuid VARCHAR(25), " .
+		"ses_key VARCHAR(25), " .
+		"ses_value VARCHAR(500)," .
+		"PRIMARY KEY (uuid, ses_key)" . 
+		") ENGINE = INNODB"; /* innoDB for row level locking*/
+	echo ($verbose ? "Creating session variables table...<br />" : "");
 	$dbo->query($sql);
 
 	echo "Finished installing. Have a nice day!!";
