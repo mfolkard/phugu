@@ -1,6 +1,8 @@
 <?php
 	include("phugu-config.php");
 	include("db.php");
+	include("consts.php");
+
 	$GLOBALS['phu_db'] = $phu_db;
 
 	if(isset($_GET["uuid"]) && (trim($_GET["uuid"]) != "")){

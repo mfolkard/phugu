@@ -17,8 +17,10 @@
 
 		/* Sends a query to the database and returns the result if successful*/
 		function query($sql){
-			$db_res = @mysql_query($sql, $this->conn);
-			
+			$db_res = mysql_query($sql, $this->conn);
+			if (!$db_res){
+				echo mysql_error($this->conn);
+			}
 			return $db_res;
 		}
 
