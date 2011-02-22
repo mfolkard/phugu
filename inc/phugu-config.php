@@ -6,8 +6,11 @@
 
 	define('DB_SERVER', 'localhost');
 	define('DB_NAME', 'phugu');
-	define('DB_USER', 'phugu');
-	define('DB_PASSWORD', 'phu9u');
+	define('DB_ADMIN_USER', 'phugu');
+	define('DB_ADMIN_PASSWORD', 'phu9u');
+	
+	define('DB_READ_USER', 'phugu_read');
+	define('DB_READ_PASSWORD', 'phu9u_read');
 
 	define('DB_TABLE_PREFIX', 'phu_');
 
